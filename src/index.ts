@@ -1,1 +1,7 @@
-console.log("hello world!");
+import { Game } from './Game';
+
+
+
+window.addEventListener('DOMContentLoaded', () => {
+    new Game();
+});
