@@ -5,7 +5,7 @@ export class LinkedNode
     protected _next:LinkedNode;
     protected _originY:number;
 
-    constructor(texturePath:string,originY)
+    constructor(texturePath:string,originY:number)
     {
         this._sprite = new Sprite(texturePath);
         this._sprite.y = originY;

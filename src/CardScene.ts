@@ -1,17 +1,14 @@
 import { TweenLite } from 'gsap';
-import { Container, ITextureDictionary, Loader } from 'pixi.js';
+import { Container, ITextureDictionary, Loader, Sprite } from 'pixi.js';
 import { Paths } from './Paths';
 import { Scene } from './Scene';
 import { FpsCounter } from './util/FpsCounter';
 import { LinkedNode } from './util/LinkedNode';
 import { Timer } from './util/Timer';
 
-enum CardTypes
+enum CardEnum
 {
-    CLOVER = 'clover.png',
-    SPADE = 'spade.png',
     HEART = 'heart.png',
-    DIAMOND = 'diamond.png'
 }
 
 
@@ -23,16 +20,18 @@ export class CardScene extends Scene
     protected _cards: LinkedNode[];
     protected _counter: number;
     protected _targetNode: LinkedNode;
-    protected _targetX: number = 100;
+    protected _targetX: number = 500;
     protected _active: boolean = false;
-    static CardLength: number = 10;
+    protected _timer:Timer;
+    static CardLength: number = 144;
 
     constructor()
     {
         super();
         this._cards = [];
-        this._counter = CardScene.CardLength;
-        this._cardContainer = new Container;
+        this._counter = CardScene.CardLength-1;
+        this._cardContainer = new Container();
+        this._cardContainer.sortableChildren = true;
         this._cardContainer.x += 200;
         this._fpsCounter = new FpsCounter(this);
         this._cardSpriteSheet = Loader.shared.resources[Paths.CARD_ASSETS].textures;
@@ -40,6 +39,7 @@ export class CardScene extends Scene
         this.addChild(this._cardContainer);
 
         console.log(this);
+        this._timer = new Timer(1000, () => this.run(), true);
 
     }
 
@@ -47,8 +47,9 @@ export class CardScene extends Scene
     {
         for (let i = 0; i < CardScene.CardLength; i++)
         {
-            let node = new LinkedNode(this._cardSpriteSheet[CardTypes.CLOVER], i * 50);
+            let node = new LinkedNode(this._cardSpriteSheet[CardEnum.HEART], i * 10);
             let sprite = node.sprite;
+            sprite.zIndex = i + 1;
             this._cardContainer.addChild(sprite);
             this._cards.push(node);
 
@@ -60,48 +61,66 @@ export class CardScene extends Scene
 
         this._cards[CardScene.CardLength - 1].linkBefore(this._cards[0]);
         this._targetNode = this._cards[CardScene.CardLength - 1];
-
-
     }
 
-    protected onPlayButton()
+    protected onPlayButtonDown()
     {
+        super.onPlayButtonDown();
         if (!this._active)
-            let timer = new Timer(1000, () => this.run(), true);
+        {
+            if(this._counter<1)
+            {
+                this.reset();
+            }
+            this._timer.start();
+            this._active = true;
+
+          
+        }
     }
 
     public start()
     {
+        let count = this._counter;
         let targetY = this._targetNode.next.originY;
-        if (this._targetX > 0)
-        {
-            TweenLite.to(this._cards[this._counter].sprite, 2, { x: this._targetX, y: targetY });
-        }
-        else
-        {
-            TweenLite.to(this._cards[this._counter].sprite, 2, { x: this._targetX, y: this._cards[this._counter].originY });
-        }
+        let tweenable = this._cards[this._counter].sprite;
+
+        TweenLite.to(tweenable, 2, { x: this._targetX, y: targetY,onComplete:()=>this.tweenComplete(count) });
+        tweenable.zIndex = (CardScene.CardLength-1)-count;
         this._targetNode = this._targetNode.next;
     }
 
+    protected tweenComplete(count:number)
+    {
+        if(count===0)
+        {
+            this._active = false;
+        }
+    }
 
 
     protected run()
     {
-        if (this._counter > 0)
+        if (this._counter >= 0)
         {
-            this._counter--;
             this.start();
+            this._counter--;
         }
         else
         {
-            this.reset();
+            this._timer.kill();
         }
     }
 
     public reset()
     {
-        this._counter = CardScene.CardLength;
-        this._targetX *= -1;
+        this._counter = CardScene.CardLength-1;
+
+        for (let i = 0; i < CardScene.CardLength; i++)
+        {
+            this._cards[i].sprite.zIndex = i;
+            this._cards[i].sprite.x = 0;
+            this._cards[i].sprite.y = this._cards[i].originY;
+        }
     }
 }

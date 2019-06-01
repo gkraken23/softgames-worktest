@@ -1,4 +1,4 @@
-import { Container, ITextureDictionary, Loader, Sprite } from 'pixi.js';
+import { Container, ITextureDictionary, Loader, Sprite, DisplayObject } from 'pixi.js';
 import { DeviceManager } from './DeviceManager';
 import { Paths } from './Paths';
 
@@ -6,6 +6,7 @@ export class Scene extends Container
 {
     protected _buttonSpriteSheet: ITextureDictionary | undefined;
     protected _uiContainer: Container;
+    protected _playButton:Sprite;
 
     constructor()
     {
@@ -25,21 +26,39 @@ export class Scene extends Container
         this.initUI();
     }
 
+
     protected initUI()
     {
-        let playButton: Sprite = new Sprite(this._buttonSpriteSheet['playButton.png']);
-        playButton.interactive = true;
-        playButton.buttonMode = true;
-        playButton.on('pointerdown', ()=>this.onPlayButton()));
+        this._playButton = new Sprite(this._buttonSpriteSheet['playButton.png']);
+        this._playButton.interactive = true;
+        this._playButton.buttonMode = true;
+        this._playButton.anchor.x = 0.5;
+        this._playButton.anchor.y = 0.5;
+        this._playButton.on('pointerdown', ()=>this.onPlayButtonDown()));
+        this._playButton.on('pointerup', ()=>this.onPlayButtonUp()));
 
 
-        playButton.x = (DeviceManager.getInstance().getWidth()/2)-(playButton.width/2);
-        playButton.y = DeviceManager.getInstance().getHeight()-200;
-        this._uiContainer.addChild(playButton);
+        this._playButton.x = DeviceManager.getInstance().getWidth()/2;
+        this._playButton.y = DeviceManager.getInstance().getHeight()-200;
+        this._uiContainer.addChild( this._playButton);
     }
 
-    protected onPlayButton()
+    protected onPlayButtonDown()
     {
-        console.log("yeah");
+        this._playButton.scale.x = 0.9;
+        this._playButton.scale.y = 0.9;
+    }
+
+    protected onPlayButtonUp()
+    {
+        this._playButton.scale.x = 1;
+        this._playButton.scale.y = 1;
+    }
+
+
+    //TODO: Resizing
+    protected onResize()
+    {
+
     }
 }

@@ -14,7 +14,7 @@ export class Timer
         this._loop = loop;
         this._callback = cb;
 
-        Ticker.shared.add(this.update,this);
+        
     }
 
     public update()
@@ -32,6 +32,11 @@ export class Timer
                this.kill();
            }
         }
+    }
+
+    public start()
+    {
+        Ticker.shared.add(this.update,this);
     }
 
     public kill()
