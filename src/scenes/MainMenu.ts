@@ -8,26 +8,33 @@ import { Scene } from './Scene';
 export class MainMenu extends Scene
 {
     protected _buttonSpriteSheet: ITextureDictionary | undefined;
+    protected _buttons:Button[];
+
     constructor()
     {
         super();
         this._buttonSpriteSheet = Loader.shared.resources[Paths.BUTTON_ASSETS].textures;
         DeviceManager.getInstance().application.stage.addChild(this);
-        let cardsButton = new Button(this._buttonSpriteSheet['buttonBackground.png']);
-        let textToolButton = new Button(this._buttonSpriteSheet['buttonBackground.png']);
+        this._buttons = [];
 
-        cardsButton.y = 50;
-        textToolButton.y = 100;
-
-        this._uiContainer.addChild(cardsButton);
-        this._uiContainer.addChild(textToolButton);
-
-        cardsButton.addText("Cards");
-        textToolButton.addText("TextTool");
+   
+        for (let i =0; i<3; i++)
+        {
+            this._buttons.push(new Button(this._buttonSpriteSheet['buttonBackground.png']));
+            this._uiContainer.addChild(this._buttons[i]);
+            this._buttons[i].y=i*60;
+        }
 
 
-        cardsButton.addHandler(()=>this.onCards());
-        textToolButton.addHandler(()=>this.onEmoji());
+
+        this._buttons[0].addText("Cards");
+        this._buttons[1].addText("TextTool");
+        this._buttons[2].addText("Particle");
+
+
+        this._buttons[0].addHandler(()=>this.onCards());
+        this._buttons[1].addHandler(()=>this.onEmoji());
+        this._buttons[2].addHandler(()=>this.onParticle());
 
         EventHandler.getInstance().addEventListener(CanvasEvent.RESIZE, () => this.onResize());
 
@@ -43,6 +50,11 @@ export class MainMenu extends Scene
     protected onEmoji()
     {
         EventHandler.getInstance().dispatch({id:"SceneSelect",data:"Emoji"});
+    }
+
+    protected onParticle()
+    {
+        EventHandler.getInstance().dispatch({id:"SceneSelect",data:"Particle"});
     }
 
     protected onResize()

@@ -13,25 +13,17 @@ export class Button extends Sprite
         this.anchor.y = 0.5;
 
         this.on('pointerdown', () => this.onButtonDown());
-        this.on('pointerup', () => this.onButtonUp());
     }
 
     protected onButtonDown()
     {
-        this.scale.x = 0.9;
-        this.scale.y = 0.9;
-
         for (let cb of this._callbacks)
         {
             cb.call(null);
         }
     }
 
-    protected onButtonUp()
-    {
-        this.scale.x = 1;
-        this.scale.y = 1;
-    }
+
 
     public addHandler(callback: (arg?: any) => void)
     {
@@ -41,9 +33,8 @@ export class Button extends Sprite
     public addText(name: string)
     {
         let text = new Text(name, { fill: 'black', align: 'left', fontSize: 20 });
-        text.anchor.x=0.5;
-        text.anchor.y=0.5;
-        text.x = this.width/2-text.width;
+        text.anchor.x = 0.5;
+        text.anchor.y = 0.5;
         this.addChild(text);
     }
 

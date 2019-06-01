@@ -54,6 +54,10 @@ export class Game
             case "Emoji":
                this._activeScene = this._emojiScene;
                 break;
+
+                case "Particle":
+                    this._activeScene = this._emojiScene;
+                     break;
         }
 
         this._mainMenu.visible = false;
