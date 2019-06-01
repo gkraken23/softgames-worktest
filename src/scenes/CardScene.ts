@@ -1,22 +1,16 @@
-import { TweenLite } from 'gsap';
 import { Container, ITextureDictionary, Loader, Sprite } from 'pixi.js';
-import { Paths } from './Paths';
 import { Scene } from './Scene';
-import { FpsCounter } from './util/FpsCounter';
-import { LinkedNode } from './util/LinkedNode';
-import { Timer } from './util/Timer';
+import { FpsCounter } from '../util/FpsCounter';
+import { LinkedNode } from '../util/LinkedNode';
+import { Timer } from '../util/Timer';
+import { TweenLite } from 'gsap';
+import { ASSET_NAMES } from '../Game';
 
-enum CardEnum
-{
-    HEART = 'heart.png',
-}
 
 
 export class CardScene extends Scene
 {
-    protected _cardSpriteSheet: ITextureDictionary | undefined;
     protected _fpsCounter: FpsCounter;
-    protected _cardContainer: Container;
     protected _cards: LinkedNode[];
     protected _counter: number;
     protected _targetNode: LinkedNode;
@@ -30,15 +24,11 @@ export class CardScene extends Scene
         super();
         this._cards = [];
         this._counter = CardScene.CardLength-1;
-        this._cardContainer = new Container();
-        this._cardContainer.sortableChildren = true;
-        this._cardContainer.x += 200;
+        this._gameObjectContainer.sortableChildren = true;
+        this._gameObjectContainer.x += 200;
         this._fpsCounter = new FpsCounter(this);
-        this._cardSpriteSheet = Loader.shared.resources[Paths.CARD_ASSETS].textures;
         this.init();
-        this.addChild(this._cardContainer);
 
-        console.log(this);
         this._timer = new Timer(1000, () => this.run(), true);
 
     }
@@ -47,10 +37,10 @@ export class CardScene extends Scene
     {
         for (let i = 0; i < CardScene.CardLength; i++)
         {
-            let node = new LinkedNode(this._cardSpriteSheet[CardEnum.HEART], i * 10);
+            let node = new LinkedNode(this._gameSpriteSheet[ASSET_NAMES.DIAMOND], i * 10);
             let sprite = node.sprite;
             sprite.zIndex = i + 1;
-            this._cardContainer.addChild(sprite);
+            this._gameObjectContainer.addChild(sprite);
             this._cards.push(node);
 
             if (i > 0)

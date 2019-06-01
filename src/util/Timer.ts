@@ -4,7 +4,7 @@ export class Timer
 {
     protected _startTime: number;
     protected _duration: number;
-    protected _loop:boolean = false;
+    protected _loop:boolean|undefined = false;
     protected _callback:() => void;
 
     constructor(duration: number, cb:() => void,loop?:boolean)

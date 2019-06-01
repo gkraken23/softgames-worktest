@@ -1,13 +1,13 @@
-import { Sprite } from 'pixi.js';
+import { Sprite, Texture } from 'pixi.js';
 export class LinkedNode
 {
     protected _sprite:Sprite;
     protected _next:LinkedNode;
     protected _originY:number;
 
-    constructor(texturePath:string,originY:number)
+    constructor(texture:Texture,originY:number)
     {
-        this._sprite = new Sprite(texturePath);
+        this._sprite = new Sprite(texture);
         this._sprite.y = originY;
         this._sprite.x = -100;
         this._originY = originY;

@@ -1,10 +1,12 @@
 import { Container, ITextureDictionary, Loader, Sprite, DisplayObject } from 'pixi.js';
-import { DeviceManager } from './DeviceManager';
-import { Paths } from './Paths';
+import { DeviceManager } from '../DeviceManager';
+import { Paths } from '../Paths';
 
 export class Scene extends Container
 {
     protected _buttonSpriteSheet: ITextureDictionary | undefined;
+    protected _gameSpriteSheet: ITextureDictionary | undefined;
+    protected _gameObjectContainer:Container;
     protected _uiContainer: Container;
     protected _playButton:Sprite;
 
@@ -12,9 +14,11 @@ export class Scene extends Container
     {
         super();
         this._buttonSpriteSheet = Loader.shared.resources[Paths.BUTTON_ASSETS].textures;
-
+        this._gameSpriteSheet = Loader.shared.resources[Paths.GAME_ASSETS].textures;
+        this._gameObjectContainer = new Container();
         this._uiContainer = new Container();
 
+        this.addChild(this._gameObjectContainer);
         this.addChild(this._uiContainer);
 
 
@@ -34,8 +38,8 @@ export class Scene extends Container
         this._playButton.buttonMode = true;
         this._playButton.anchor.x = 0.5;
         this._playButton.anchor.y = 0.5;
-        this._playButton.on('pointerdown', ()=>this.onPlayButtonDown()));
-        this._playButton.on('pointerup', ()=>this.onPlayButtonUp()));
+        this._playButton.on('pointerdown', ()=>this.onPlayButtonDown());
+        this._playButton.on('pointerup', ()=>this.onPlayButtonUp());
 
 
         this._playButton.x = DeviceManager.getInstance().getWidth()/2;

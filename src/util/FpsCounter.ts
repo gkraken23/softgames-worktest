@@ -1,5 +1,5 @@
 import { Text } from 'pixi.js';
-import { Scene } from '../Scene';
+import { Scene } from '../Scenes/Scene';
 
 export class FpsCounter 
 {
