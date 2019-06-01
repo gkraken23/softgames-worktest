@@ -1,33 +1,32 @@
-import {Application} from 'pixi.js';
+import { Application } from 'pixi.js';
+import { EventHandler } from './util/EventDispatcher';
+import { IEvent } from './util/IEvent';
 
-// export enum DeviceOrientation
-// {
-//     PORTRAIT = "ORIENTATION_PORTRAIT",
-//     LANDSCAPE = "ORIENTATION_LANDSCAPE"
-// }
 
+export enum CanvasEvent
+{
+    RESIZE = "RESIZE"
+}
 export class DeviceManager
 {
     private static _instance: DeviceManager;
 
 
-    protected _application:Application;
+    protected _application: Application;
     protected _mainDiv: HTMLDivElement;
-    // protected _orientation: string;
 
     private constructor()
     {
 
-       this._application = new Application();
+        this._application = new Application();
 
-   
+
         this._mainDiv = this.createMainDiv();
 
         this._mainDiv.appendChild(this._application.view);
         document.body.appendChild(this._mainDiv);
-        // this._orientation = DeviceOrientation.LANDSCAPE;
 
-  
+
         document.documentElement.requestFullscreen();
         window.addEventListener('resize', () => this.onWindowResize());
         this.onWindowResize();
@@ -35,39 +34,19 @@ export class DeviceManager
 
     protected onWindowResize()
     {
-            this._application.view.width = window.innerWidth;
-            this._application.view.height = window.innerHeight;
+        this._application.view.width = window.innerWidth;
+        this._application.view.height = window.innerHeight;
 
-        // let newOrientation: string = this._orientation;
-        // if (this._application.view.width < this._application.view.height)
-        // {
-        //     newOrientation = DeviceOrientation.PORTRAIT;
-        // }
-        // else
-        // {
-        //     newOrientation = DeviceOrientation.LANDSCAPE;
-        // }
 
-        // if (newOrientation != this._orientation)
-        // {
-        //     this._orientation = newOrientation;
-
-        //     // let orientationEvent: IEvent = {
-        //     //     id: OrientationEvent.CHANGE,
-        //     //     data: this._orientation
-        //     // }
-        //     // GlobalStateEventsHandler.getInstance().dispatch(orientationEvent);
-        // }
-
-        // GlobalStateEventsHandler.getInstance().dispatch({ id: CanvasChangeEvent.RESIZE })
+        EventHandler.getInstance().dispatch({ id: CanvasEvent.RESIZE })
     }
 
-    public getWidth():number
+    public getWidth(): number
     {
         return this._application.view.width;
     }
 
-    public getHeight():number
+    public getHeight(): number
     {
         return this._application.view.height;
     }
@@ -82,7 +61,7 @@ export class DeviceManager
         return DeviceManager._instance;
     }
 
-    public get application():Application
+    public get application(): Application
     {
         return this._application;
     }

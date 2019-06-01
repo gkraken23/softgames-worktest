@@ -9,7 +9,6 @@ export class LinkedNode
     {
         this._sprite = new Sprite(texture);
         this._sprite.y = originY;
-        this._sprite.x = -100;
         this._originY = originY;
     }
 

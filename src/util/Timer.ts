@@ -13,8 +13,6 @@ export class Timer
         this._startTime = performance.now();
         this._loop = loop;
         this._callback = cb;
-
-        
     }
 
     public update()
@@ -36,6 +34,7 @@ export class Timer
 
     public start()
     {
+        this._startTime = performance.now();
         Ticker.shared.add(this.update,this);
     }
 
