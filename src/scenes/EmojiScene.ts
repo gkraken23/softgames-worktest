@@ -1,28 +1,19 @@
 import { Container, Sprite, Text } from 'pixi.js';
-import { ASSET_NAMES } from '../Game';
+import { MessageHandler } from '../data/MessageHandler';
+import { DeviceManager } from '../DeviceManager';
 import { ITextStyle } from '../interface/ITextStyle';
-import { Scene } from './Scene';
 import { Random } from '../util/Random';
+import { Scene } from './Scene';
 
 
 //TODO : Randomize patterns, get messages from JSON
 export class EmojiScene extends Scene
 {
-    protected _randomFontSize: number = 100;
     protected _style: ITextStyle;
     protected _textImageContainer: Container;
-    protected _defaultScale:number = 0.5;
-    protected _textHeadCoordX:number=0;
-    protected _wordSpacing:number=20;
-    
-    private _value : string;
-    public get value() : string {
-        return this._value;
-    }
-    public set value(v : string) {
-        this._value = v;
-    }
-    
+    protected _textHeadCoordX: number = 0;
+    protected _wordSpacing: number = 20;
+
 
     constructor()
     {
@@ -30,48 +21,60 @@ export class EmojiScene extends Scene
         this._style = { fill: 'white', align: 'left', fontSize: 20 };
         this._textImageContainer = new Container();
         this._gameObjectContainer.addChild(this._textImageContainer);
-        this.init();
+        this._gameObjectContainer.x = DeviceManager.getInstance().getWidth() / 2;
+        this._textImageContainer.y += 100;
+
+        console.log(this._textImageContainer);
     }
 
     protected onPlayButtonDown()
     {
         super.onPlayButtonDown();
-        if(this._textImageContainer.children.length>0)
+        if (this._textImageContainer.children.length > 0)
         {
             this._textImageContainer.removeChildren();
         }
 
-        this._style.fontSize = Random.randomRange(20,100);
-        let text = new Text('WOW',this._style);
+        this._style.fontSize = Random.randomRange(20, 50);
 
-        let sprite = new Sprite(this._gameSpriteSheet[ASSET_NAMES.WINK]);
-        let randScale = Random.randomRange(0.5,1,false);
-        sprite.scale.x = randScale;
-        sprite.scale.y = randScale;
+        // let randomMessageIdx: number = Random.randomRange(0, 3);
+        let randomMessageIdx: number = 0;
+        let randomMessage: string = MessageHandler.getMessage(randomMessageIdx);
 
-        this.addImageOrText(sprite);
-        this.addImageOrText(text);
+        this.parse(randomMessage);
+
+
+
+
+        this._textImageContainer.x = -this._textImageContainer.width / 2;
     }
 
-    protected init()
+    public parse(message: string)
     {
-        // this._style.fontSize = 20;
-        // const sprite = new Sprite(this._gameSpriteSheet[ASSET_NAMES.WINK]);
-        // sprite.scale.x = this._defaultScale;
-        // sprite.scale.y = this._defaultScale;
-        // let text = new Text('Wow', this._style);
-        // this.addImageOrText(text);
+        let parsedMessage = message.split('%');
 
-        // this.addImageOrText(sprite);
+        for (let msg of parsedMessage)
+        {
+            if (msg.indexOf('$') > -1)
+            {
 
-        // this._style.fontSize = 50;
-        //  text = new Text('Glenny', this._style);
+                let textureName = msg.substr(1, msg.length - 2);
+                let sprite = new Sprite(this._gameSpriteSheet[textureName]);
+                let randScale = Random.randomRange(0.2, 0.8, false);
+                sprite.scale.x = randScale;
+                sprite.scale.y = randScale;
+                this.addImageOrText(sprite);
+            }
+            else
+            {
+                this._style.fontSize = Random.randomRange(20, 50);
+                let text = new Text(msg, this._style);
 
-        //  this.addImageOrText(text);
-        //  text = new Text('test', this._style);
-        //  this._style.fontSize = 200;
-        //  this.addImageOrText(text);
+                this.addImageOrText(text);
+            }
+        }
     }
+
 
     public addImageOrText(sprite: Sprite)
     {
@@ -79,8 +82,20 @@ export class EmojiScene extends Scene
         for (let i = 1; i < this._textImageContainer.children.length; i++)
         {
             let prevSprite = this._textImageContainer.children[i - 1] as Sprite;
+
             this._textHeadCoordX = sprite.x;
-            sprite.x = prevSprite.width+this._textHeadCoordX+this._wordSpacing;
+            sprite.x = prevSprite.width + this._textHeadCoordX + this._wordSpacing;
+
+            if (prevSprite.height < this._textImageContainer.height)
+            {
+
+                prevSprite.y = this._textImageContainer.height - prevSprite.height;
+            }
         }
+
+        sprite.y = this._textImageContainer.height - sprite.height;
+
     }
+
+
 }
