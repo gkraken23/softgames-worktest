@@ -57,6 +57,7 @@ export class Game
         }
 
         this._mainMenu.visible = false;
+        this._activeScene.activate();
         this._activeScene.visible = true;
     }
 

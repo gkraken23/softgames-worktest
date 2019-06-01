@@ -62,12 +62,12 @@ export class CardScene extends GameScene
             this.run();
             this._timer.start();
             this._active = true;
+            super.start();
         }
     }
 
     protected return()
     {
-
         TweenMax.killAll();
         this._timer.kill();
         this.reset();
@@ -90,6 +90,7 @@ export class CardScene extends GameScene
     {
         if (count === 0)
         {
+            this.activate();
             this._active = false;
         }
     }
@@ -112,7 +113,6 @@ export class CardScene extends GameScene
     {
         this._targetNode = this._cards[CardScene.CardLength - 1];
         this._counter = CardScene.CardLength - 1;
-
         for (let i = 0; i < CardScene.CardLength; i++)
         {
             this._cards[i].sprite.zIndex = i;

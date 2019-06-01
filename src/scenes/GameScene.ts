@@ -19,6 +19,11 @@ export class GameScene extends Scene
         this.initUI();
     }
 
+    public activate()
+    {
+        this._playButton.visible = true;
+    }
+
     protected initUI()
     {
         this._playButton = new Button(this._buttonSpriteSheet['playButton.png']);
@@ -39,20 +44,22 @@ export class GameScene extends Scene
         this._playButton.y = DeviceManager.getInstance().getHeight()-100;
 
         this._returnButton.x =DeviceManager.getInstance().getWidth()/14;
-        this._returnButton.y = 100;
+        this._returnButton.y = 80;
 
 
-        this._gameObjectContainer.y=DeviceManager.getInstance().getHeight()/12;
+        this._gameObjectContainer.y=0;
         this._gameObjectContainer.x = DeviceManager.getInstance().getWidth() / 2;
     }
 
     protected start()
     {
-        console.warn("Doesn't do anything!");
+       this._playButton.visible = false;
     }
 
     protected return()
     {
         this.mainMenu();
     }
+
+ 
 }

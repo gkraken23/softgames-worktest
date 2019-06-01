@@ -23,7 +23,7 @@ export class EmojiScene extends GameScene
         this._textContainer = new Container();
         this._gameObjectContainer.addChild(this._textContainer);
 
-        this._textContainer.y += 100;
+        this._textContainer.y += 200;
         this._timer = new Timer(2000, () => this.showText(), true);
 
     }
@@ -35,6 +35,7 @@ export class EmojiScene extends GameScene
             this._active = true;
             this.showText();
             this._timer.start();
+            this._playButton.visible = false;
         }
     }
 
@@ -60,8 +61,6 @@ export class EmojiScene extends GameScene
             this._textContainer.removeChildren();
         }
 
-
-
         let str = "";
 
         for (let i = 0; i < 3; i++)
@@ -71,7 +70,7 @@ export class EmojiScene extends GameScene
             {
                 let randomMessageIdx: number = Random.randomRange(0, MessageHandler.messages.length);
                 let randomMessage: string = MessageHandler.messages[randomMessageIdx];
-                str += " " + randomMessage;
+                str += " %" + randomMessage+"%";
             }
             else
             {
@@ -81,13 +80,7 @@ export class EmojiScene extends GameScene
             }
         }
 
-
-
-
-
         this.parse(str);
-
-
 
 
         this._textContainer.x = -this._textContainer.width / 2;
@@ -96,12 +89,14 @@ export class EmojiScene extends GameScene
     public parse(message: string)
     {
         let parsedMessage = message.split('%');
-
+        if (parsedMessage.length < 2)
+        {
+            parsedMessage = message.split(" ");
+        }
         for (let msg of parsedMessage)
         {
             if (msg.indexOf('$') > -1)
             {
-
                 let textureName = msg.substr(1, msg.length - 2);
                 let sprite = new Sprite(this._gameSpriteSheet[textureName]);
                 let randScale = Random.randomRange(0.7, 0.8, false);
@@ -115,7 +110,6 @@ export class EmojiScene extends GameScene
             {
                 this._style.fontSize = Random.randomRange(20, 40);
                 let text = new Text(msg, this._style);
-
                 this.addImageOrText(text);
             }
         }
@@ -139,7 +133,7 @@ export class EmojiScene extends GameScene
 
 
             //Offset text
-            if (gameObject instanceof Text)
+            if (gameObject instanceof Text && gameObject.y > 50)
             {
                 gameObject.y -= 30;
             }

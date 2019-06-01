@@ -23,7 +23,10 @@ export class Scene extends Container
     }
 
 
+    public activate()
+    {
 
+    }
     protected mainMenu()
     {
         EventHandler.getInstance().dispatch({id:"MainMenu"});
@@ -38,4 +41,6 @@ export class Scene extends Container
         // this._returnButton.x =DeviceManager.getInstance().getWidth()/14;
         // this._returnButton.y = 100;
     }
+
+ 
 }
