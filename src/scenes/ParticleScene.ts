@@ -1,38 +1,40 @@
 import { Emitter } from 'pixi-particles';
-import { ParticleContainer, Ticker, Container, Sprite } from 'pixi.js';
-import { GameScene } from './GameScene';
-import { Random } from '../util/Random';
+import { Container, Sprite, Ticker } from 'pixi.js';
 import { DeviceManager } from '../DeviceManager';
+import { IGameScene } from '../interface/IGameScene';
+import { GameScene } from './GameScene';
+import { UIContainer } from './UIContainer';
 
-export class ParticleScene extends GameScene
+export class ParticleScene extends GameScene implements IGameScene
 {
     protected _emitter: Emitter;
     protected _particleContainer: Container;
     protected _elapsed: number;
-    protected _candleSprite:Sprite;
+    protected _candleSprite: Sprite;
 
-    constructor()
+    constructor(uiContainer: UIContainer)
     {
-        super();
+        super(uiContainer);
         this._particleContainer = new Container();
-        this._emitter = new Emitter(this._particleContainer, [this._gameSpriteSheet['fire1.png'],this._gameSpriteSheet['fire2.png']], this.particleConfig());
-        // this._particleContainer.y=250;
+        this._emitter = new Emitter(this._particleContainer, [this._gameSpriteSheet['fire1.png'], this._gameSpriteSheet['fire2.png']], this.particleConfig());
         this._gameObjectContainer.addChild(this._particleContainer);
-
-        console.log(this);
     }
 
     protected onResize()
     {
         super.onResize();
-        this._gameObjectContainer.y = (DeviceManager.getInstance().getHeight()/2)+100;
+        this._gameObjectContainer.y = (DeviceManager.getInstance().getHeight() / 2) + 100;
+    }
+
+    public return()
+    {
+        Ticker.shared.remove(this.update, this);
+        this._emitter.emit = false;
     }
 
 
-
-    protected start()
+    public start()
     {
-        super.start();
         this._elapsed = performance.now();
         Ticker.shared.add(this.update, this);
         this._emitter.emit = true;
@@ -54,8 +56,8 @@ export class ParticleScene extends GameScene
                 "end": 0
             },
             "scale": {
-                "start":1,
-                "end": 3,
+                "start": 2,
+                "end": 4,
                 "minimumScaleMultiplier": 1
             },
             "speed": {

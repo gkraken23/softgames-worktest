@@ -73,9 +73,4 @@ export class DeviceManager
 
         return divElement;
     }
-
-    // public getAspectRatio(): number
-    // {
-    //     return this._application.wi / this.getCanvasHeight();
-    // }
 }

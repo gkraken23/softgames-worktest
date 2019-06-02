@@ -1,5 +1,5 @@
 import { Text } from 'pixi.js';
-import { Scene } from '../Scenes/Scene';
+import { GameScene } from '../scenes/GameScene';
 
 export class FpsCounter 
 {
@@ -7,7 +7,7 @@ export class FpsCounter
     protected _fps: number;
     protected _textField:Text;
 
-     constructor(scene:Scene)
+     constructor(scene:GameScene)
     {
         this._textField = new Text('Glen',{ font: '35px Snippet', fill: 'white', align: 'left' });
         scene.addChild(this._textField);

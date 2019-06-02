@@ -1,65 +1,34 @@
-import { Scene } from './Scene';
-import { Loader, Container, ITextureDictionary } from 'pixi.js';
+import { Container, ITextureDictionary, Loader } from 'pixi.js';
+import { CanvasEvent, DeviceManager } from '../DeviceManager';
 import { Paths } from '../Paths';
 import { Button } from '../util/Button';
-import { DeviceManager } from '../DeviceManager';
-export class GameScene extends Scene
+import { EventHandler } from '../util/EventDispatcher';
+import { UIContainer } from './UIContainer';
+
+export class GameScene extends Container
 {
     protected _gameSpriteSheet: ITextureDictionary | undefined;
-    protected _gameObjectContainer:Container;
-    protected _playButton:Button;
-    protected _returnButton:Button;
+    protected _gameObjectContainer: Container;
+    protected _playButton: Button;
+    protected _returnButton: Button;
+    protected _uiContainer: UIContainer;
 
-    constructor()
+    constructor(uiContainer: UIContainer)
     {
         super();
+        this._uiContainer = uiContainer;
         this._gameSpriteSheet = Loader.shared.resources[Paths.GAME_ASSETS].textures;
         this._gameObjectContainer = new Container();
         this.addChild(this._gameObjectContainer);
-        this.initUI();
-    }
+        DeviceManager.getInstance().application.stage.addChild(this);
+        EventHandler.getInstance().addEventListener(CanvasEvent.RESIZE, () => this.onResize());
 
-    public activate()
-    {
-        this._playButton.visible = true;
-    }
-
-    protected initUI()
-    {
-        this._playButton = new Button(this._buttonSpriteSheet['playButton.png']);
-        this._returnButton = new Button(this._buttonSpriteSheet['returnButton.png']);
-
-        this._uiContainer.addChild(this._playButton);
-        this._uiContainer.addChild(this._returnButton);
-
-
-        this._playButton.addHandler(()=>this.start());
-        this._returnButton.addHandler(()=>this.return());
         this.onResize();
     }
 
+
     protected onResize()
     {
-        this._playButton.x = DeviceManager.getInstance().getWidth()/2;
-        this._playButton.y = DeviceManager.getInstance().getHeight()-100;
-
-        this._returnButton.x =DeviceManager.getInstance().getWidth()/14;
-        this._returnButton.y = 80;
-
-
-        this._gameObjectContainer.y=0;
         this._gameObjectContainer.x = DeviceManager.getInstance().getWidth() / 2;
     }
-
-    protected start()
-    {
-       this._playButton.visible = false;
-    }
-
-    protected return()
-    {
-        this.mainMenu();
-    }
-
- 
 }

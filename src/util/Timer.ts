@@ -4,10 +4,10 @@ export class Timer
 {
     protected _startTime: number;
     protected _duration: number;
-    protected _loop:boolean|undefined = false;
-    protected _callback:() => void;
+    protected _loop: boolean | undefined = false;
+    protected _callback: () => void;
 
-    constructor(duration: number, cb:() => void,loop?:boolean)
+    constructor(duration: number, cb: () => void, loop?: boolean)
     {
         this._duration = duration;
         this._startTime = performance.now();
@@ -20,26 +20,26 @@ export class Timer
         let currentTime = performance.now();
         if (currentTime - this._startTime >= this._duration)
         {
-           this._callback.call(null);
-           if(this._loop)
-           {
-               this._startTime = performance.now();
-           }
-           else
-           {
-               this.kill();
-           }
+            this._callback.call(null);
+            if (this._loop)
+            {
+                this._startTime = performance.now();
+            }
+            else
+            {
+                this.kill();
+            }
         }
     }
 
     public start()
     {
         this._startTime = performance.now();
-        Ticker.shared.add(this.update,this);
+        Ticker.shared.add(this.update, this);
     }
 
     public kill()
     {
-        Ticker.shared.remove(this.update,this);
+        Ticker.shared.remove(this.update, this);
     }
 }

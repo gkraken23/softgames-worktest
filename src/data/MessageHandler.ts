@@ -22,14 +22,4 @@ export abstract class MessageHandler
         '%$winktongue.png$%',
         '%$bow.png$%'
     ]
-
-    public static getMessage(idx: number): string
-    {
-        return MessageHandler.messages[idx];
-    }
-
-    public getEmoji(idx: number): string
-    {
-        return MessageHandler.emojis[idx];
-    }
 }

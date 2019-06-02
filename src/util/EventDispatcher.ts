@@ -1,5 +1,5 @@
 import { Dispatcher } from './Dispatcher';
-import { IEvent } from './IEvent';
+import { IEvent } from '../interface/IEvent';
 
 /**
  * A collection of dispatchers that are assigned to specific Events
@@ -13,7 +13,6 @@ export class EventHandler {
 
     }
 
-    
     public static getInstance()
     {
         if (!EventHandler._instance)
@@ -81,7 +80,7 @@ export class EventHandler {
     }
 
     /**
-     * This is share between remoevEventListener and killEvent
+     * This is shared between remoevEventListener and killEvent
      * Deletes the event from the EventHandler instance
      * @param eventName the name of the event
      */

@@ -1,4 +1,5 @@
-export interface IEvent {
+export interface IEvent
+{
     id: string,
     data?: any
 }

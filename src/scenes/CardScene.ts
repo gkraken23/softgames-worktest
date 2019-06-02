@@ -3,10 +3,12 @@ import { FpsCounter } from '../util/FpsCounter';
 import { LinkedNode } from '../util/LinkedNode';
 import { Timer } from '../util/Timer';
 import { GameScene } from './GameScene';
+import { UIContainer } from './UIContainer';
+import { IGameScene } from '../interface/IGameScene';
 
 
 
-export class CardScene extends GameScene
+export class CardScene extends GameScene implements IGameScene
 {
     protected _fpsCounter: FpsCounter;
     protected _cards: LinkedNode[];
@@ -17,9 +19,9 @@ export class CardScene extends GameScene
     protected _timer: Timer;
     static CardLength: number = 144;
 
-    constructor()
+    constructor(uiContainer:UIContainer)
     {
-        super();
+        super(uiContainer);
         this._cards = [];
         this._counter = CardScene.CardLength - 1;
         this._gameObjectContainer.sortableChildren = true;
@@ -51,7 +53,7 @@ export class CardScene extends GameScene
         this._targetNode = this._cards[CardScene.CardLength - 1];
     }
 
-    protected start()
+    public start()
     {
         if (!this._active)
         {
@@ -62,17 +64,15 @@ export class CardScene extends GameScene
             this.run();
             this._timer.start();
             this._active = true;
-            super.start();
         }
     }
 
-    protected return()
+    public return()
     {
         TweenMax.killAll();
         this._timer.kill();
         this.reset();
         this._active = false;
-        super.return();
     }
 
     public move()
@@ -90,7 +90,6 @@ export class CardScene extends GameScene
     {
         if (count === 0)
         {
-            this.activate();
             this._active = false;
         }
     }
@@ -119,12 +118,5 @@ export class CardScene extends GameScene
             this._cards[i].sprite.x = 0;
             this._cards[i].sprite.y = this._cards[i].originY;
         }
-    }
-
-
-    protected onResize()
-    {
-        super.onResize();
-        this._gameObjectContainer.x -= 150;
     }
 }

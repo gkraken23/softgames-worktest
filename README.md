@@ -1,6 +1,5 @@
-# empty-project-typescript
+# Softgames worktest
 
-Empty project.
 
 ## Building and running on localhost
 
@@ -19,10 +18,13 @@ npm run build-prod
 To create a development build:
 
 ```sh
-npm run build-dev
+npm run build
 ```
 
 ## Running
+```sh
+npm install http-server, run it inside dist and open the ip in your browser.
+```
 
 ```sh
 node dist/bundle.js
