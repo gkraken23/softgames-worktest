@@ -20,7 +20,6 @@ export class DeviceManager
 
         this._application = new Application();
 
-
         this._mainDiv = this.createMainDiv();
 
         this._mainDiv.appendChild(this._application.view);

@@ -7,6 +7,7 @@ import { EventHandler } from './util/EventDispatcher';
 import { Scene } from './scenes/Scene';
 import { MainMenu } from './scenes/MainMenu';
 import { IEvent } from './util/IEvent';
+import { ParticleScene } from './scenes/ParticleScene';
 
 
 
@@ -16,6 +17,7 @@ export class Game
     protected _mainMenu: Scene;
     protected _cardScene: Scene;
     protected _emojiScene: Scene;
+    protected _particleScene: Scene;
 
     constructor()
     {
@@ -39,8 +41,10 @@ export class Game
         this._mainMenu = new MainMenu();
         this._cardScene = new CardScene();
         this._emojiScene = new EmojiScene();
+        this._particleScene = new ParticleScene();
         this._cardScene.visible = false;
         this._emojiScene.visible = false;
+        this._particleScene.visible = false;
     }
 
     protected onSceneSelect(e: IEvent)
@@ -56,7 +60,7 @@ export class Game
                 break;
 
                 case "Particle":
-                    this._activeScene = this._emojiScene;
+                    this._activeScene = this._particleScene;
                      break;
         }
 
