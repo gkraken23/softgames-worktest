@@ -1,4 +1,4 @@
-import { IEvent } from './IEvent';
+import { IEvent } from '../interface/IEvent';
 
 export class Dispatcher {
     protected _listeners: Array<() => void>;

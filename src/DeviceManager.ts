@@ -1,12 +1,11 @@
 import { Application } from 'pixi.js';
 import { EventHandler } from './util/EventDispatcher';
-import { IEvent } from './util/IEvent';
-
 
 export enum CanvasEvent
 {
     RESIZE = "RESIZE"
 }
+
 export class DeviceManager
 {
     private static _instance: DeviceManager;
@@ -64,7 +63,6 @@ export class DeviceManager
     {
         return this._application;
     }
-
 
     protected createMainDiv(): HTMLDivElement
     {
